@@ -1,0 +1,179 @@
+<!Doctype html>
+<html>
+
+  <head>
+     <title>Application</title>
+	 
+	 <script>
+	 
+		 var arr = new Array();
+		 var opn = "A";
+		 var index = -1;
+		 
+        function addData(){
+		 if(opn == "A"){
+		    getData();
+			
+			arr.push({
+			eid:document.getElementById("eid").value,
+			name:document.getElementById("name").value,
+			phone:document.getElementById("phone").value,
+			Email:document.getElementById("email").value
+            });
+			 
+			localStorage.setItem("localData",JSON.stringify(arr));
+			showData();
+			document.getElementById("eid").value="";
+			document.getElementById("name").value="";
+			document.getElementById("phone").value="";
+			document.getElementById("email").value="";
+			return true;
+		   }
+		   else{
+		   	// alert(index);
+		     	arr[index] = JSON.stringify({
+									eid : document.getElementById("eid").value,
+									name : document.getElementById("name").value,
+									phone : document.getElementById("phone").value,
+									Email : document.getElementById("email").value
+								});//Alter the selected item on the table
+		     	// /alert(arr[index]);  
+					localStorage.setItem("localData", JSON.stringify(arr));
+					opn = "A";
+					// alert(arr[index]);
+					alert("The data was edited.");
+                    // showData();
+                    document.getElementById("eid").value="";
+			        document.getElementById("name").value="";
+			        document.getElementById("phone").value="";
+			        document.getElementById("email").value="";
+					// opn = "A"; //Return to default value
+					showData();
+					return true;
+		   
+		   }
+		   
+		   
+		}
+		
+	
+	function getData(){
+		    var str = localStorage.getItem("localData");
+            if(str != null)
+			   arr = JSON.parse(str);
+		}
+		 
+		function deleteData(){
+		     localStorage.clear();
+		}
+		 
+		function showData(){
+		     getData();
+		     console.log("ffggggggggggggggggg");
+		     var tbl = document.getElementById("myTable");
+			 
+			 var x = tbl.rows.length;
+			 while(--x){
+			    tbl.deleteRow(x);
+			 }
+			 // alert(arr.length);
+			 
+			 for(i=0;i<arr.length;i++)
+			 {
+			 	var cli = JSON.parse(arr[i]);
+			       var r = tbl.insertRow();
+                   var cell1 = r.insertCell();
+				   var cell2 = r.insertCell();
+				   var cell3 = r.insertCell();
+				   var cell4 = r.insertCell();
+				   var cell5 = r.insertCell();
+				   
+				   cell1.innerHTML = cli.eid;
+				   cell2.innerHTML = cli.name;
+				   cell3.innerHTML = cli.phone;
+				   cell4.innerHTML = cli.email;
+				   cell5.innerHTML = '<button style="background-color: red; float: right; color: white" title="'+i+'" onclick="onEdit(this)" >Edit</button><br/>'
+				                        +'<button style="background-color: red; float: right; color: white" title="'+i+'" onclick="onDelete(this)">Delete</button>';
+ 
+		     }
+		   } 
+		   
+	    function onDelete(td){
+			var items = localStorage.getItem("localData");
+			if(items != null){
+			   arr = JSON.parse(items);
+			   td.parentNode.parentNode.style.display = 'none';
+			   arr.splice(td.title, 1);
+			   console.log(td.title);
+			   localStorage.clear();
+			   localStorage.setItem("localData",JSON.stringify(arr));
+			}
+	    }
+		   
+		function onEdit(td){
+		    opn ="E";
+			var items = localStorage.getItem("localData");
+			if(items != null){
+			   arr = JSON.parse(items);
+	          }  
+			var cli = JSON.parse(arr[td.title]);
+			index = td.title;
+			// alert(index);
+			console.log(td.title);
+			console.log(cli);
+			document.getElementById("eid").value = cli.eid;
+			document.getElementById("name").value = cli.name;
+			document.getElementById("phone").value = cli.phone;
+			document.getElementById("email").value = cli.email;
+		  //  localStorage.setItem("localData",JSON.stringify(arr));
+		}
+		
+  
+				
+	 </script>
+	 
+   </head>
+   
+   <body >
+    <h2 style= "color:blue; text-decoration: underline; text-align: center">FILL IT !!!</h2>
+	<form autocomplete="off" >
+	   <div style =" margin: 8px; text-align: center" >
+           <label>EMP ID:</label>
+           <input type = "text" id="eid" placeholder="Enter Id" />
+	   </div>
+	    <div style =" margin: 8px; text-align: center" >
+           <label>NAME:</label>
+           <input type = "text" id="name" placeholder="Enter Name" />
+	   </div>
+        <div style =" margin: 8px; text-align: center"  >
+           <label>PHONE NO.:</label>
+		   <select>
+		           <option>+91</option>
+		           <option>+92</option>
+				   <option>+93</option>
+		   </select>
+           <input type = "text" id="phone" placeholder="Enter phone no" />
+	   </div>
+	   <div style ="margin: 8px; text-align: center" >
+           <label>EMAIL ID:</label>
+           <input type = "text" id="email" placeholder="Enter email id"/>
+		</div>
+        <div style ="margin: 20px; text-align: center" >		
+	       <input type = "button" value="save" onclick="addData()" style="background-color:red; color:white"  />
+		   <input type = "button" value="Delete whole Data" onclick="deleteData()" style="background-color:red; color:white" />
+		   <input type = "button" value="show" onclick="showData()" style="background-color:red; color:white" />
+		</div> 
+	  </form>	
+          
+		<h2 style="color:blue; text-decoration: underline; text-align: center">RECORDS</h2>
+        <table align="center" id="myTable" border=1 style="background-color: #ADD8E6; border-collapse: collapse">
+		    <tr style= "height:50px">
+			    <th style= "width:70px">Emp ID</th>
+				<th style= "width:100px">Name</th>
+				<th style= "width:100px">Phone</th>
+				<th style= "width:100px">Email</th>
+			</tr>
+		</table>
+   </body>
+   
+<html>	 
